@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ultra-Premium EAN-14 Barcode Generator</title>
+ 
+     <link rel="stylesheet" href="style.css">
+   
+  </head>
+  <body>
+    <div class="heading">
+      <h1>Made By Sohal(Guru)</h1>
+    </div>
+
+    <div class="container">
+      <h2>EAN-14 (ITF-14) Generator</h2>
+      <input type="text" id="ean14" placeholder="Enter 13 or 14 digits" />
+      <button id="generateBtn" onclick="generateEAN14()">
+        Generate Barcode
+      </button>
+      <div id="error" class="error"></div>
+      <svg id="barcode"></svg>
+    </div>
+
+    <script>
+      const ITF = {
+        0: "00110",
+        1: "10001",
+        2: "01001",
+        3: "11000",
+        4: "00101",
+        5: "10100",
+        6: "01100",
+        7: "00011",
+        8: "10010",
+        9: "01010",
+      };
+
+      function calculateCheckDigit(code) {
+        let sum = 0;
+        for (let i = 0; i < code.length; i++) {
+          sum += parseInt(code[i]) * (i % 2 === 0 ? 3 : 1);
+        }
+        return (10 - (sum % 10)) % 10;
+      }
+
+      function generateEAN14() {
+        const input = document.getElementById("ean14").value.trim();
+        const error = document.getElementById("error");
+        const svg = document.getElementById("barcode");
+        const btn = document.getElementById("generateBtn");
+
+        error.textContent = "";
+        svg.innerHTML = "";
+        svg.style.background = "transparent";
+
+        if (!/^\d{13,14}$/.test(input)) {
+          error.textContent = "Enter only 13 or 14 digits";
+          return;
+        }
+        let code = input;
+        if (code.length === 13) {
+          code += calculateCheckDigit(code);
+        }
+        if (code.length % 2 !== 0) {
+          error.textContent = "EAN-14 must be even digits";
+          return;
+        }
+
+        let pattern = "1010";
+        for (let i = 0; i < code.length; i += 2) {
+          const a = ITF[code[i]];
+          const b = ITF[code[i + 1]];
+          for (let j = 0; j < 5; j++) {
+            pattern += a[j] === "1" ? "11" : "1";
+            pattern += b[j] === "1" ? "00" : "0";
+          }
+        }
+        pattern += "1101";
+
+        drawBarcode(pattern, code);
+      }
+
+      function drawBarcode(pattern, code) {
+        const barWidth = 2;
+        const height = 80;
+        let x = 0;
+        const svg = document.getElementById("barcode");
+        svg.innerHTML = "";
+        svg.style.background = "#fff";
+        svg.style.borderRadius = "12px";
+        svg.style.padding = "8px";
+        svg.style.display = "inline-block";
+        svg.setAttribute("width", pattern.length * barWidth + 16);
+        svg.setAttribute("height", height + 35);
+
+        for (let bit of pattern) {
+          if (bit === "1") {
+            const rect = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "rect"
+            );
+            rect.setAttribute("x", x);
+            rect.setAttribute("y", 0);
+            rect.setAttribute("width", barWidth);
+            rect.setAttribute("height", height);
+            rect.setAttribute("fill", "black");
+            svg.appendChild(rect);
+          }
+          x += barWidth;
+        }
+
+        const text = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "text"
+        );
+        text.setAttribute("x", (pattern.length * barWidth) / 2);
+        text.setAttribute("y", height + 25);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("font-size", "16");
+        text.setAttribute("font-weight", "bold");
+        text.setAttribute("fill", "#000");
+        text.textContent = code;
+        svg.appendChild(text);
+      }
+    </script>
+  </body>
+</html>
