@@ -1,35 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Ultra-Premium EAN-14 Barcode Generator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <div class="app-wrapper">
+<div class="app-wrapper">
 
-    <div class="heading">
-      <h1>Made By Sohal (Guru)</h1>
-    </div>
-
-    <div class="container">
-      <h2>EAN-14 (ITF-14) Generator</h2>
-
-      <input type="text" id="ean14" placeholder="Enter 13 or 14 digits" />
-
-      <button id="generateBtn" onclick="generateEAN14()">
-        Generate Barcode
-      </button>
-
-      <div id="error" class="error"></div>
-
-      <svg id="barcode"></svg>
-    </div>
-
+  <div class="heading">
+    <h1>Made By Sohal (Guru)</h1>
   </div>
+
+  <div class="container">
+    <h2>EAN-14 (ITF-14) Generator</h2>
+
+    <input type="text" id="ean14" placeholder="Enter 13 or 14 digits">
+
+    <button onclick="generateEAN14()">Generate Barcode</button>
+
+    <div id="error" class="error"></div>
+
+    <svg id="barcode"></svg>
+  </div>
+
+</div>
 
 <script>
 const ITF = {
@@ -58,10 +56,7 @@ function generateEAN14() {
     return;
   }
 
-  let code = input;
-  if (code.length === 13) {
-    code += calculateCheckDigit(code);
-  }
+  let code = input.length === 13 ? input + calculateCheckDigit(input) : input;
 
   let pattern = "1010";
   for (let i = 0; i < code.length; i += 2) {
@@ -87,7 +82,7 @@ function drawBarcode(pattern, code) {
   svg.style.borderRadius = "12px";
   svg.style.padding = "8px";
   svg.style.display = "block";
-  svg.style.margin = "20px auto";
+  svg.style.margin = "18px auto";
 
   svg.setAttribute("width", pattern.length * barWidth + 16);
   svg.setAttribute("height", height + 35);
@@ -99,7 +94,7 @@ function drawBarcode(pattern, code) {
       rect.setAttribute("y", 0);
       rect.setAttribute("width", barWidth);
       rect.setAttribute("height", height);
-      rect.setAttribute("fill", "black");
+      rect.setAttribute("fill", "#000");
       svg.appendChild(rect);
     }
     x += barWidth;
