@@ -101,10 +101,15 @@ button {
 }
 
 /* BARCODE */
-svg {
-  max-width: 100%;
-  overflow: hidden;
-}
+  svg {
+        max-width: 100%;
+        overflow: hidden;
+        border-radius: 12px;
+        margin-top: 18px;
+        height: 90%;
+        /* background-color: transparent; */
+        width: 60%;
+      }
 
 /* MOBILE */
 @media (max-width: 480px) {
@@ -112,3 +117,4 @@ svg {
     font-size: 1.3rem;
   }
 }
+
