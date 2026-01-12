@@ -110,11 +110,19 @@ button {
         /* background-color: transparent; */
         width: 60%;
       }
-
+  #barcode {
+        min-width: 45%;
+        overflow: hidden;
+        border-radius: 12px;
+        margin-top: 18px;
+        height: auto; 
+        width: 70%;
+      }
 /* MOBILE */
 @media (max-width: 480px) {
   .heading h1 {
     font-size: 1.3rem;
   }
 }
+
 
